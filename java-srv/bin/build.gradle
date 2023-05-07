@@ -1,0 +1,70 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.4'
+    // part of our logger
+    id 'com.adarshr.test-logger' version '3.2.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'groovy'
+}
+
+group = 'boot-gradle'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+  mavenCentral()
+  // Spock snapshots are available from the Sonatype OSS snapshot repository
+  maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+// by default gradle silences logging, this will show the basics
+testlogger {
+    theme 'mocha'
+    showExceptions true
+    showStackTraces true
+    showFullStackTraces false
+    showCauses true
+    slowThreshold 2000
+    showSummary true
+    showSimpleNames false
+    showPassed true
+    showSkipped true
+    showFailed true
+    showOnlySlow false
+    showStandardStreams true
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
+    logLevel 'info'
+}
+
+test {
+
+   useJUnitPlatform()
+
+   testlogger {
+        theme 'mocha' // task level
+    }
+    
+    // Show test results.
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+dependencies {    
+    implementation 'org.codehaus.groovy:groovy-all:3.0.7'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.projectlombok:lombok:1.18.8'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+// unit tests
+    testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testImplementation "org.spockframework:spock-core"
+    testImplementation "org.spockframework:spock-spring"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation 'org.graylog2:gelfj:1.1.16'
+
+}
